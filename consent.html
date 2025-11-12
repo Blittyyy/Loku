@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loku - User Consent and Opt-In Process</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1 {
+            color: #3B82F6;
+            border-bottom: 3px solid #3B82F6;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #1F2937;
+            margin-top: 30px;
+        }
+        .section {
+            background: #F9FAFB;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #3B82F6;
+        }
+        .check {
+            color: #10B981;
+            font-weight: bold;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        code {
+            background: #E5E7EB;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>Loku - User Consent and Opt-In Process</h1>
+    
+    <div class="section">
+        <h2>Overview</h2>
+        <p>Loku is a location-based safety application that sends SMS notifications to trusted contacts. All messaging is <strong>opt-in only</strong> and requires explicit user consent.</p>
+    </div>
+
+    <div class="section">
+        <h2>How Users Provide Consent</h2>
+        
+        <h3>1. Contact Confirmation Process</h3>
+        <p>Users must explicitly confirm each trusted contact before any messages can be sent:</p>
+        <ol>
+            <li><strong>Add Contact</strong>: User adds a contact's name and phone number in the app</li>
+            <li><strong>Confirm Contact</strong>: User must tap "✓ Confirm Contact" button for each contact</li>
+            <li><strong>Verification</strong>: Only contacts with <code>confirmed: true</code> status can receive messages</li>
+        </ol>
+
+        <h3>2. Contact Group Membership</h3>
+        <p>Users can organize contacts into groups for quick messaging:</p>
+        <ul>
+            <li>Users manually add contacts to groups</li>
+            <li>Only confirmed contacts with valid phone numbers are included</li>
+            <li>Users can remove contacts from groups at any time</li>
+        </ul>
+
+        <h3>3. Message Delivery Options</h3>
+        <p>Users choose how messages are sent:</p>
+        <ul>
+            <li><strong>SMS Composer</strong>: Opens native phone SMS app (no Twilio involvement)</li>
+            <li><strong>Loku (Twilio)</strong>: Sends via Twilio API (requires confirmed contacts only)</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Consent Requirements</h2>
+        
+        <h3>Explicit Opt-In</h3>
+        <ul>
+            <li><span class="check">✓</span> Users must manually confirm each contact</li>
+            <li><span class="check">✓</span> Contacts must have <code>confirmed: true</code> status in the database</li>
+            <li><span class="check">✓</span> Users can revoke consent by removing contacts or unconfirming them</li>
+            <li><span class="check">✓</span> No messages sent without explicit confirmation</li>
+        </ul>
+
+        <h3>Data Collection</h3>
+        <ul>
+            <li>Only phone numbers provided by the user</li>
+            <li>Contact names provided by the user</li>
+            <li>No third-party data collection</li>
+            <li>No automated contact importing</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>User Control</h2>
+        <p>Users have full control over:</p>
+        <ul>
+            <li>Adding/removing contacts</li>
+            <li>Confirming/unconfirming contacts</li>
+            <li>Managing contact groups</li>
+            <li>Choosing delivery method (SMS Composer vs Twilio)</li>
+            <li>Viewing and managing all trusted contacts in Settings</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Privacy</h2>
+        <ul>
+            <li>All contact data is stored securely in Supabase</li>
+            <li>Users can delete contacts at any time</li>
+            <li>No contact information is shared with third parties</li>
+            <li>Messages are sent only to user-confirmed contacts</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Revocation of Consent</h2>
+        <p>Users can revoke consent by:</p>
+        <ol>
+            <li>Removing a contact from the app</li>
+            <li>Unconfirming a contact (removes <code>confirmed: true</code> status)</li>
+            <li>Removing a contact from a contact group</li>
+            <li>Deleting their account (removes all contact data)</li>
+        </ol>
+    </div>
+
+    <div class="section">
+        <h2>Contact</h2>
+        <p>For questions about consent or privacy, users can manage their contacts directly in the Loku app Settings section.</p>
+    </div>
+
+    <hr>
+    <p><small><strong>Last Updated</strong>: January 2025</small></p>
+</body>
+</html>
+
