@@ -1,0 +1,44 @@
+{
+  "expo": {
+    "name": "Loku",
+    "slug": "Loku",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Loku uses your location to trigger arrival reminders.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "Loku runs geofencing in the background.",
+        "NSLocationTemporaryUsageDescriptionDictionary": {
+          "FullAccuracy": "Needed for accurate arrival detection."
+        },
+        "UIBackgroundModes": ["location"]
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_BACKGROUND_LOCATION",
+        "POST_NOTIFICATIONS"
+      ],
+      "package": "com.anonymous.Loku"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}
