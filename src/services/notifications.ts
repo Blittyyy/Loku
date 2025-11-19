@@ -3,13 +3,18 @@ import { Platform } from 'react-native';
 
 // Configure notification handler
 Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-    shouldShowBanner: true,
-    shouldShowList: true,
-  }),
+  handleNotification: async (notification) => {
+    // Suppress visual notification if marked as sound-only
+    const isSoundOnly = notification.request.content.data?.soundOnly === true;
+    
+    return {
+      shouldShowAlert: !isSoundOnly,
+      shouldPlaySound: true,
+      shouldSetBadge: false,
+      shouldShowBanner: !isSoundOnly,
+      shouldShowList: !isSoundOnly,
+    };
+  },
 });
 
 /**

@@ -9,6 +9,8 @@ const dbTriggerToTrigger = (dbTrigger: DatabaseTrigger): Trigger => ({
   type: dbTrigger.type,
   message: dbTrigger.message,
   soundEnabled: dbTrigger.sound_enabled,
+  customSoundUri: dbTrigger.custom_sound_uri,
+  soundType: dbTrigger.custom_sound_uri ? 'custom' : 'default',
   enabled: dbTrigger.enabled,
   createdAt: dbTrigger.created_at,
 });
@@ -87,6 +89,7 @@ export const useTriggers = create<TriggersState>((set, get) => ({
           type: trigger.type,
           message: trigger.message,
           sound_enabled: trigger.soundEnabled,
+          custom_sound_uri: trigger.customSoundUri || null,
           enabled: trigger.enabled,
         })
         .select()
@@ -113,6 +116,7 @@ export const useTriggers = create<TriggersState>((set, get) => ({
       if (updated.type) dbUpdate.type = updated.type;
       if (updated.message !== undefined) dbUpdate.message = updated.message;
       if (updated.soundEnabled !== undefined) dbUpdate.sound_enabled = updated.soundEnabled;
+      if (updated.customSoundUri !== undefined) dbUpdate.custom_sound_uri = updated.customSoundUri || null;
       if (updated.enabled !== undefined) dbUpdate.enabled = updated.enabled;
 
       const { error } = await supabase

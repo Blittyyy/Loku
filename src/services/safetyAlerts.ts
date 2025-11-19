@@ -1,5 +1,6 @@
 import { supabase } from '../lib/supabase';
 import { useSettings } from '../store/useSettings';
+import { Linking } from 'react-native';
 
 interface Contact {
   id: string;
@@ -11,6 +12,7 @@ interface Contact {
 
 /**
  * Sends safety alert to trusted contacts when arrival/departure confirmed
+ * Uses SMS Composer (user's personal number) for all contacts
  */
 export const sendSafetyAlerts = async (
   placeName: string,
@@ -44,36 +46,45 @@ export const sendSafetyAlerts = async (
       return;
     }
 
-    // Send alert to each contact
-    const promises = contacts.map(async (contact: Contact) => {
-      try {
-        const { data, error } = await supabase.functions.invoke('send-shared-alert', {
-          body: {
-            contact_phone: contact.phone,
-            contact_email: contact.email,
-            place_name: placeName,
-            event_type: eventType,
-          },
-        });
+    // Filter contacts with phone numbers
+    const contactsWithPhone = contacts.filter((c) => c.phone && c.phone.trim().length > 0);
 
-        if (error) throw error;
+    if (contactsWithPhone.length === 0) {
+      console.log('No contacts with phone numbers to notify');
+      return;
+    }
 
-        console.log(`Safety alert sent to ${contact.phone || contact.email} - ${eventType} at ${placeName}`);
+    // Build message
+    const message = eventType === 'arrival'
+      ? `📍 ${placeName}: I've arrived safely.`
+      : `👋 ${placeName}: I've left.`;
+
+    // Build SMS URL with all phone numbers (comma-separated)
+    const phoneNumbers = contactsWithPhone.map((c) => c.phone).join(',');
+    const smsUrl = `sms:${phoneNumbers}?body=${encodeURIComponent(message)}`;
+
+    try {
+      const canOpen = await Linking.canOpenURL(smsUrl);
+      if (canOpen) {
+        await Linking.openURL(smsUrl);
+        console.log(`Safety alert opened in SMS composer - ${eventType} at ${placeName} to ${contactsWithPhone.length} contact(s)`);
         
         // Log to trigger_logs
         await supabase.from('trigger_logs').insert({
-          place_name: `${placeName} (to ${contact.phone || contact.email})`,
+          place_name: `${placeName} (to ${contactsWithPhone.length} contact(s))`,
           event_type: `safety_${eventType}`,
         });
-
-        return { success: true };
-      } catch (error) {
-        console.error(`Error sending alert to contact:`, error);
-        return { success: false, error };
+      } else {
+        console.error('Cannot open SMS composer');
+        // Don't show alert here - this runs in background, user might not see it
       }
-    });
+    } catch (error) {
+      console.error('Error opening SMS composer:', error);
+      // Don't show alert here - this runs in background
+    }
 
-    await Promise.all(promises);
+    // Note: Email notifications could be added here in the future
+    // For now, we only support SMS via the user's personal number
   } catch (error) {
     console.error('Error in sendSafetyAlerts:', error);
   }

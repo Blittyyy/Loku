@@ -7,20 +7,19 @@ interface NotificationPreviewProps {
 }
 
 export const NotificationPreview: React.FC<NotificationPreviewProps> = ({ message, type }) => {
-  const title = 'Loku';
   const body = message || (type === 'arrival' ? 'Arrival reminder' : 'You left this place');
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Preview</Text>
       <View style={styles.notification}>
-        <View style={styles.notificationHeader}>
-          <Text style={styles.title}>{title}</Text>
-          <Text style={styles.now}>now</Text>
-        </View>
-        <Text style={styles.body}>{body}</Text>
-        <View style={styles.iconContainer}>
-          <Text style={styles.icon}>{type === 'arrival' ? '🏠' : '👋'}</Text>
+        <View style={styles.content}>
+          <View style={styles.appIcon}>
+            <Text style={styles.appIconText}>L</Text>
+          </View>
+          <View style={styles.textContainer}>
+            <Text style={styles.appName}>Loku</Text>
+            <Text style={styles.body}>{body}</Text>
+          </View>
         </View>
       </View>
     </View>
@@ -29,49 +28,51 @@ export const NotificationPreview: React.FC<NotificationPreviewProps> = ({ messag
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 24,
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#374151',
-    marginBottom: 12,
+    marginBottom: 0,
   },
   notification: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    padding: 16,
-    borderWidth: 1,
+    borderRadius: 14,
+    padding: 14,
+    borderWidth: 0.5,
     borderColor: '#E5E7EB',
-    position: 'relative',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+    elevation: 2,
   },
-  notificationHeader: {
+  content: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8,
+    alignItems: 'flex-start',
   },
-  title: {
+  appIcon: {
+    width: 32,
+    height: 32,
+    borderRadius: 8,
+    backgroundColor: '#007AFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 12,
+  },
+  appIconText: {
     fontSize: 16,
+    fontWeight: '700',
+    color: '#FFFFFF',
+  },
+  textContainer: {
+    flex: 1,
+  },
+  appName: {
+    fontSize: 15,
     fontWeight: '600',
     color: '#1F2937',
-  },
-  now: {
-    fontSize: 12,
-    color: '#6B7280',
+    marginBottom: 4,
   },
   body: {
     fontSize: 14,
-    color: '#4B5563',
+    color: '#6B7280',
     lineHeight: 20,
-  },
-  iconContainer: {
-    position: 'absolute',
-    right: 16,
-    top: 16,
-  },
-  icon: {
-    fontSize: 24,
   },
 });
 

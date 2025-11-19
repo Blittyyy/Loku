@@ -6,6 +6,7 @@ import { Input } from '../../src/components/Input';
 import { ToggleRow } from '../../src/components/ToggleRow';
 import { Button } from '../../src/components/Button';
 import { NotificationPreview } from '../../src/components/NotificationPreview';
+import { SoundPicker, SoundOption } from '../../src/components/SoundPicker';
 
 export default function EditTriggerScreen() {
   const navigation = useNavigation();
@@ -15,6 +16,8 @@ export default function EditTriggerScreen() {
   const [type, setType] = useState<'arrival' | 'departure'>('arrival');
   const [message, setMessage] = useState('');
   const [soundEnabled, setSoundEnabled] = useState(false);
+  const [customSoundUri, setCustomSoundUri] = useState<string | null>(null);
+  const [soundType, setSoundType] = useState<'default' | 'custom'>('default');
 
   const getTrigger = useTriggers((state) => state.getTrigger);
   const updateTrigger = useTriggers((state) => state.updateTrigger);
@@ -25,12 +28,31 @@ export default function EditTriggerScreen() {
       setType(trigger.type);
       setMessage(trigger.message);
       setSoundEnabled(trigger.soundEnabled);
+      setCustomSoundUri(trigger.customSoundUri || null);
+      setSoundType(trigger.soundType || 'default');
     }
   }, [id, getTrigger]);
 
   const handleSave = () => {
-    updateTrigger(id, { type, message, soundEnabled });
+    updateTrigger(id, {
+      type,
+      message,
+      soundEnabled,
+      customSoundUri: soundType === 'custom' ? customSoundUri : null,
+      soundType,
+    });
     navigation.goBack();
+  };
+
+  const handleSoundSelect = (sound: SoundOption | null) => {
+    if (sound) {
+      setSoundType(sound.type);
+      if (sound.type === 'custom' && sound.uri) {
+        setCustomSoundUri(sound.uri);
+      } else {
+        setCustomSoundUri(null);
+      }
+    }
   };
 
   const handleDelete = () => {
@@ -50,27 +72,36 @@ export default function EditTriggerScreen() {
       </View>
 
       <ScrollView style={styles.scrollView}>
-        <View style={styles.typeSelector}>
+        <Text style={styles.sectionLabel}>Trigger Type</Text>
+        <View style={styles.segmentedControl}>
           <TouchableOpacity
-            style={[styles.typeButton, type === 'arrival' && styles.typeButtonActive]}
+            style={[
+              styles.segment,
+              styles.segmentLeft,
+              type === 'arrival' && styles.segmentActive,
+            ]}
             onPress={() => setType('arrival')}
           >
-            <Text style={[styles.typeText, type === 'arrival' && styles.typeTextActive]}>
+            <Text style={[styles.segmentText, type === 'arrival' && styles.segmentTextActive]}>
               Arrival
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.typeButton, type === 'departure' && styles.typeButtonActive]}
+            style={[
+              styles.segment,
+              styles.segmentRight,
+              type === 'departure' && styles.segmentActive,
+            ]}
             onPress={() => setType('departure')}
           >
-            <Text style={[styles.typeText, type === 'departure' && styles.typeTextActive]}>
+            <Text style={[styles.segmentText, type === 'departure' && styles.segmentTextActive]}>
               Departure
             </Text>
           </TouchableOpacity>
         </View>
 
+        <Text style={styles.sectionLabel}>Message</Text>
         <Input
-          label="Message"
           placeholder="Enter notification message"
           value={message}
           onChangeText={setMessage}
@@ -78,9 +109,12 @@ export default function EditTriggerScreen() {
         />
 
         {message && (
-          <View style={styles.previewContainer}>
-            <NotificationPreview message={message} type={type} />
-          </View>
+          <>
+            <Text style={styles.sectionLabel}>Preview</Text>
+            <View style={styles.previewContainer}>
+              <NotificationPreview message={message} type={type} />
+            </View>
+          </>
         )}
 
         <ToggleRow
@@ -88,6 +122,15 @@ export default function EditTriggerScreen() {
           value={soundEnabled}
           onValueChange={setSoundEnabled}
         />
+
+        {soundEnabled && (
+          <SoundPicker
+            value={customSoundUri || undefined}
+            soundType={soundType}
+            onSelect={handleSoundSelect}
+            triggerType={type}
+          />
+        )}
 
         <View style={styles.saveButtonContainer}>
           <Button title="Save" onPress={handleSave} disabled={!message.trim()} />
@@ -133,43 +176,64 @@ const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
     padding: 20,
+    paddingBottom: 20,
   },
-  typeSelector: {
-    flexDirection: 'row',
-    gap: 12,
-    marginBottom: 24,
-  },
-  typeButton: {
-    flex: 1,
-    paddingVertical: 12,
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: '#D1D5DB',
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-  },
-  typeButtonActive: {
-    borderColor: '#3B82F6',
-    backgroundColor: '#3B82F6',
-  },
-  typeText: {
-    fontSize: 16,
+  sectionLabel: {
+    fontSize: 13,
     fontWeight: '500',
     color: '#6B7280',
+    marginBottom: 8,
+    marginTop: 0,
   },
-  typeTextActive: {
+  segmentedControl: {
+    flexDirection: 'row',
+    backgroundColor: '#F3F4F6',
+    borderRadius: 10,
+    padding: 3,
+    marginBottom: 16,
+    marginTop: 0,
+  },
+  segment: {
+    flex: 1,
+    paddingVertical: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+  },
+  segmentLeft: {
+    borderTopLeftRadius: 8,
+    borderBottomLeftRadius: 8,
+  },
+  segmentRight: {
+    borderTopRightRadius: 8,
+    borderBottomRightRadius: 8,
+  },
+  segmentActive: {
+    backgroundColor: '#007AFF',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  segmentText: {
+    fontSize: 15,
+    fontWeight: '500',
+    color: '#1F2937',
+  },
+  segmentTextActive: {
     color: '#FFFFFF',
   },
   saveButtonContainer: {
-    marginTop: 8,
-    marginBottom: 16,
+    marginTop: 4,
+    marginBottom: 12,
   },
   previewContainer: {
-    marginTop: 8,
-    marginBottom: 16,
+    marginTop: 0,
+    marginBottom: 12,
   },
   deleteButtonContainer: {
-    marginBottom: 40,
+    marginBottom: 0,
   },
 });
 

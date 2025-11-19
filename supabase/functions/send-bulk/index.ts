@@ -256,7 +256,9 @@ serve(async (req) => {
         const formData = new URLSearchParams();
         formData.append('From', TWILIO_PHONE_NUMBER);
         formData.append('To', contact.phone);
-        formData.append('Body', message);
+        // Add opt-out instructions to messages (required for compliance)
+        const messageWithOptOut = `${message}\n\nReply STOP to unsubscribe.`;
+        formData.append('Body', messageWithOptOut);
 
         const response = await fetch(twilioUrl, {
           method: 'POST',

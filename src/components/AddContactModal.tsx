@@ -86,6 +86,13 @@ export const AddContactModal: React.FC<AddContactModalProps> = ({
                   keyboardType="phone-pad"
                   returnKeyType="next"
                 />
+                {phone.trim() && (
+                  <View style={styles.phoneNotice}>
+                    <Text style={styles.phoneNoticeText}>
+                      💡 Contacts must be confirmed before receiving SMS. They can reply STOP to opt-out.
+                    </Text>
+                  </View>
+                )}
               </View>
 
               <View style={styles.field}>
@@ -214,6 +221,19 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginTop: 8,
+  },
+  phoneNotice: {
+    marginTop: 8,
+    backgroundColor: '#F0F9FF',
+    padding: 10,
+    borderRadius: 8,
+    borderLeftWidth: 3,
+    borderLeftColor: '#3B82F6',
+  },
+  phoneNoticeText: {
+    fontSize: 12,
+    color: '#1E40AF',
+    lineHeight: 16,
   },
 });
 

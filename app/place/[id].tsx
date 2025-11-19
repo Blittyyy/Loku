@@ -67,12 +67,16 @@ export default function PlaceDetailsScreen() {
             </View>
           ) : (
             arrivalTriggers.map((trigger) => (
-              <View key={trigger.id} style={styles.triggerCard}>
+              <TouchableOpacity
+                key={trigger.id}
+                style={styles.triggerCard}
+                onPress={() => (navigation as any).navigate('TriggerEdit', { id: trigger.id })}
+              >
                 <Text style={styles.triggerMessage}>{trigger.message}</Text>
                 <Text style={styles.triggerMeta}>
                   Sound: {trigger.soundEnabled ? 'On' : 'Off'}
                 </Text>
-              </View>
+              </TouchableOpacity>
             ))
           )}
         </View>
@@ -85,12 +89,16 @@ export default function PlaceDetailsScreen() {
             </View>
           ) : (
             departureTriggers.map((trigger) => (
-              <View key={trigger.id} style={styles.triggerCard}>
+              <TouchableOpacity
+                key={trigger.id}
+                style={styles.triggerCard}
+                onPress={() => (navigation as any).navigate('TriggerEdit', { id: trigger.id })}
+              >
                 <Text style={styles.triggerMessage}>{trigger.message}</Text>
                 <Text style={styles.triggerMeta}>
                   Sound: {trigger.soundEnabled ? 'On' : 'Off'}
                 </Text>
-              </View>
+              </TouchableOpacity>
             ))
           )}
         </View>

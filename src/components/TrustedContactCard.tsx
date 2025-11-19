@@ -60,14 +60,26 @@ export const TrustedContactCard: React.FC<TrustedContactCardProps> = ({
       </View>
 
       {!contact.confirmed ? (
-        <TouchableOpacity
-          style={styles.confirmButton}
-          onPress={() => onConfirm?.(contact.id)}
-        >
-          <Text style={styles.confirmButtonText}>✓ Confirm Contact</Text>
-        </TouchableOpacity>
+        <View style={styles.confirmSection}>
+          <View style={styles.optInNotice}>
+            <Text style={styles.optInText}>
+              By confirming, {contact.name} will receive SMS notifications from you via Loku. Message and data rates may apply. They can reply STOP to opt-out at any time.
+            </Text>
+          </View>
+          <TouchableOpacity
+            style={styles.confirmButton}
+            onPress={() => onConfirm?.(contact.id)}
+          >
+            <Text style={styles.confirmButtonText}>✓ Confirm Contact</Text>
+          </TouchableOpacity>
+        </View>
       ) : (
-        <Text style={styles.confirmedText}>✓ Confirmed</Text>
+        <View>
+          <Text style={styles.confirmedText}>✓ Confirmed</Text>
+          <Text style={styles.optOutInfo}>
+            {contact.name} can reply STOP to opt-out of messages
+          </Text>
+        </View>
       )}
     </View>
   );
@@ -153,6 +165,28 @@ const styles = StyleSheet.create({
     color: '#10B981',
     marginTop: 8,
     fontWeight: '500',
+  },
+  confirmSection: {
+    marginTop: 8,
+  },
+  optInNotice: {
+    backgroundColor: '#F0F9FF',
+    borderLeftWidth: 3,
+    borderLeftColor: '#3B82F6',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 12,
+  },
+  optInText: {
+    fontSize: 12,
+    color: '#1E40AF',
+    lineHeight: 18,
+  },
+  optOutInfo: {
+    fontSize: 11,
+    color: '#6B7280',
+    marginTop: 4,
+    fontStyle: 'italic',
   },
 });
 

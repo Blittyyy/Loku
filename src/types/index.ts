@@ -15,6 +15,8 @@ export type Trigger = {
   type: 'arrival' | 'departure';
   message: string;
   soundEnabled: boolean;
+  customSoundUri?: string | null;
+  soundType?: 'default' | 'custom';
   enabled: boolean;
   createdAt: string;
 };

@@ -17,6 +17,7 @@ import { useQuickActions } from './src/store/useQuickActions';
 
 // Screens
 import HomeScreen from './app/(tabs)/index';
+import OnboardingScreen from './app/onboarding';
 import NewPlaceScreen from './app/place/new';
 import PlaceDetailsScreen from './app/place/[id]';
 import NewTriggerScreen from './app/trigger/new';
@@ -25,6 +26,7 @@ import SettingsScreen from './app/settings/index';
 
 export type RootStackParamList = {
   Home: undefined;
+  Onboarding: undefined;
   PlaceNew: undefined;
   PlaceDetails: { id: string };
   TriggerNew: { placeId: string };
@@ -92,6 +94,7 @@ export default function App() {
           }}
         >
               <Stack.Screen name="Home" component={HomeScreen} />
+              <Stack.Screen name="Onboarding" component={OnboardingScreen} />
               <Stack.Screen name="PlaceNew" component={NewPlaceScreen} />
               <Stack.Screen name="PlaceDetails" component={PlaceDetailsScreen} />
               <Stack.Screen name="TriggerNew" component={NewTriggerScreen} />

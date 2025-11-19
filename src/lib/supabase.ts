@@ -34,6 +34,7 @@ export type DatabaseTrigger = {
   type: 'arrival' | 'departure';
   message: string;
   sound_enabled: boolean;
+  custom_sound_uri: string | null;
   notify_contacts: boolean;
   enabled: boolean;
   last_state: string | null;

@@ -41,7 +41,7 @@ export const Input: React.FC<InputProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 16,
+    marginBottom: 12,
   },
   label: {
     fontSize: 14,

@@ -54,17 +54,31 @@ export default function HomeScreen() {
     (navigation as any).navigate('Settings');
   };
 
+  const handleOnboardingPress = () => {
+    (navigation as any).navigate('Onboarding');
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.branding}>Loku</Text>
-        <TouchableOpacity
-          onPress={handleSettingsPress}
-          style={styles.settingsButton}
-          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-        >
-          <Text style={styles.settingsButtonText}>⚙️</Text>
-        </TouchableOpacity>
+        <View style={styles.headerButtons}>
+          {/* Temporary onboarding button */}
+          <TouchableOpacity
+            onPress={handleOnboardingPress}
+            style={styles.tempButton}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <Text style={styles.tempButtonText}>🎓</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={handleSettingsPress}
+            style={styles.settingsButton}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <Text style={styles.settingsButtonText}>⚙️</Text>
+          </TouchableOpacity>
+        </View>
       </View>
       <View style={styles.subheader}>
         <Text style={styles.subtitle}>
@@ -130,6 +144,21 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#1F2937',
     flex: 1,
+  },
+  headerButtons: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  tempButton: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#EFF6FF',
+    borderRadius: 20,
+  },
+  tempButtonText: {
+    fontSize: 20,
   },
   settingsButton: {
     width: 40,
